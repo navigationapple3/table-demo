@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Table, Space, Typography, Rate, Popconfirm, Form, Input, Tag } from 'antd';
+import { Table, Space, Typography, Rate, Popconfirm, Form, Input, Tag, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { addProduct, deleteProduct, fetchProduct, updateProduct } from './service';
@@ -10,6 +10,7 @@ import { DEFAULT_PAGE, DEFAULT_SIZE, DEFAULT_SIZE_OPTION } from './constant';
 import ColumnDrawer from './ColumnDrawer';
 import { v4 } from 'uuid';
 import ImageUploader from './ImageUploader';
+import { supabase } from '@/app/db/supabase';
 
 const { Search } = Input;
 
@@ -26,6 +27,31 @@ const TablePage: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('table_add_on_columns', JSON.stringify(addOnColumns));
   }, [addOnColumns]);
+
+  useEffect(() => {
+    const channel = supabase.channel("table_db_changes").on(
+      "postgres_changes",
+      {
+        event: "*",
+        shema: 'public',
+        table: "products",
+      },
+      (payload) => {
+        const { eventType, commit_timestamp, table } = payload;
+
+        notification.success({
+          message: `This message is from supabase realtime channel:`,
+          description: `${eventType} Event on Table ${table} at ${commit_timestamp}`,
+        })
+      },
+    );
+
+    channel.subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [supabase]);
 
   const onEdit = (record: ProductInfo) => {
     form.setFieldsValue({ ...record });

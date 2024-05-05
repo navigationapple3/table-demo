@@ -29,6 +29,7 @@ The objective of this project is to create a robust and user-friendly data table
 
    - **Update and Enter Columns:** Allow users to directly edit the cell content and add new columns dynamically.
    - **Pagination:** Implement pagination controls, allowing users to navigate through the data. Include options to select pagination size (e.g., 10, 50, 100 rows per page).
+   - **real-time capabilities** Utilize Supabase's real-time capabilities to enable immediate updates across all clients when changes are made to the data.
 
 5. **Advanced Features:**
    - **Search Implementation:** Implement search functionality to allow users to search for specific data.
@@ -38,8 +39,6 @@ The objective of this project is to create a robust and user-friendly data table
 ## TODO:
 
 - Implement efficient handling and rendering of large datasets (up to 50,000 rows) to ensure optimal performance.
-- Utilize Supabase's real-time capabilities to enable immediate updates across all clients when changes are made to the data.
-
 ## Dependencies
 
 - **@reduxjs/toolkit:** State management library for managing application state efficiently.
