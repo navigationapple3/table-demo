@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../../db/supabase';
 import { ProductInfo } from './types';
-import { Spin } from 'antd';
+import { notification, Spin } from 'antd';
 import { v4 } from 'uuid';
 import { updateProductImage } from './service';
 
@@ -31,9 +31,19 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
+  
     fileInput.addEventListener('change', async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
+        const maxSize = 2 * 1024 * 1024;
+        if (file.size >= maxSize) {
+          notification.error({
+            message: "File size exceeds the 2MB limit"
+          })
+          return;
+        }
+
+
         const imageUrl = await uploadImage(file);
 
         if (imageUrl) {
@@ -53,7 +63,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
         <img src={link || record.imgUrl} alt="" />
       </Spin>
     </div>
-  ) : <label htmlFor="file-upload">点击上传图片</label>;
+  ) : <label htmlFor="file-upload">Click to upload image (2MB)</label>;
 };
 
 export default ImageUploader;
