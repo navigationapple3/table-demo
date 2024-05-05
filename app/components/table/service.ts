@@ -1,5 +1,6 @@
+import { notification } from "antd";
 import { supabase } from "../../db/supabase";
-import { ActionTypes } from "./types";
+import { ActionTypes, ProductInfo } from "./types";
 import { Dispatch } from "redux";
 
 export const pageAndSizeToRange = (
@@ -14,7 +15,8 @@ export const pageAndSizeToRange = (
 export const fetchProduct = async (
   dispatch: Dispatch,
   page: number,
-  size: number
+  size: number,
+  searchText: string
 ) => {
   try {
     const [start, end] = pageAndSizeToRange(page, size);
@@ -24,7 +26,12 @@ export const fetchProduct = async (
       payload: true,
     });
 
-    const result = await supabase.from("products").select().range(start, end);
+    const result = await supabase
+      .from("products")
+      .select()
+      .or(`asin.ilike.%${searchText}%, title.ilike.%${searchText}%`)
+      .order("asin", { ascending: false })
+      .range(start, end);
 
     const total = 220000;
 
@@ -40,6 +47,10 @@ export const fetchProduct = async (
       type: ActionTypes.SET_LOADING,
       payload: false,
     });
+
+    notification.success({
+      message: "Fech Success",
+    });
   } catch (error) {
     dispatch({
       type: ActionTypes.SET_LOADING,
@@ -48,17 +59,54 @@ export const fetchProduct = async (
   }
 };
 
-export const updateProduct = () => {
+export const updateProduct = async (id: string, title: string) => {
   try {
-  } catch (e) {}
+    await supabase.from("products").update({ title }).eq("id", id);
+
+    notification.success({
+      message: "Update Success",
+    });
+  } catch (e) {
+    notification.error({
+      message: e?.message,
+    });
+  }
 };
 
-export const deleteProduct = () => {
+export const updateProductImage = async (id: string, image: string) => {
   try {
-  } catch (e) {}
+    await supabase.from("products").update({ imgUrl: image }).eq("id", id);
+
+    notification.success({
+      message: "Update Image Success",
+    });
+  } catch (e) {
+    notification.error({
+      message: e?.message,
+    });
+  }
 };
 
-export const addProduct = () => {
+export const deleteProduct = async (id: string) => {
   try {
+    await supabase.from("products").delete().eq("id", id);
+
+    notification.success({
+      message: "Delete Success",
+    });
+  } catch (e) {
+    notification.error({
+      message: e?.message,
+    });
+  }
+};
+
+export const addProduct = async (record: ProductInfo) => {
+  try {
+    await supabase.from("products").insert(record);
+
+    notification.success({
+      message: "Insert Success",
+    });
   } catch (e) {}
 };
