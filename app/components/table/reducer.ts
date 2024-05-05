@@ -1,9 +1,5 @@
 import { Reducer } from "redux";
-import {
-  type TableState,
-  type Action,
-  ActionTypes,
-} from "./types";
+import { type TableState, type Action, ActionTypes } from "./types";
 
 const initialState: TableState = {
   columns: [],
@@ -17,16 +13,13 @@ const initialState: TableState = {
     key: "",
     dataIndex: "",
   },
-  addOnColumns:
-    localStorage.getItem("table_add_on_columns") != null
-      ? JSON.parse(localStorage.getItem("table_add_on_columns"))
-      : [],
+  addOnColumns: [],
   searchText: "",
 };
 
 const tableReducer: Reducer<TableState, Action> = (
   state = initialState,
-  action,
+  action
 ) => {
   switch (action.type) {
     case ActionTypes.SET_COLUMNS:

@@ -24,9 +24,9 @@ const TablePage: React.FC = () => {
 
   const isEditing = (record: ProductInfo) => record.id === editingKey;
 
-  useEffect(() => {
-    localStorage.setItem('table_add_on_columns', JSON.stringify(addOnColumns));
-  }, [addOnColumns]);
+  // useEffect(() => {
+  //   localStorage.setItem('table_add_on_columns', JSON.stringify(addOnColumns));
+  // }, [addOnColumns]);
 
   useEffect(() => {
     const channel = supabase.channel("table_db_changes").on(
