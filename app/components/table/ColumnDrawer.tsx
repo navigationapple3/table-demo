@@ -34,7 +34,7 @@ const ColumnDrawer: React.FC = () => {
     <Drawer
       title="Add Column"
       onClose={handleDrawerClose}
-      visible={visible}
+      open={visible}
       width={600}
       footer={
         <Space>

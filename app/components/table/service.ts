@@ -47,10 +47,6 @@ export const fetchProduct = async (
       type: ActionTypes.SET_LOADING,
       payload: false,
     });
-
-    notification.success({
-      message: "Fech Success",
-    });
   } catch (error) {
     dispatch({
       type: ActionTypes.SET_LOADING,

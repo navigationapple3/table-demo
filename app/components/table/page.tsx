@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Table, Space, Typography, Rate, Popconfirm, Form, Input, Tag, notification } from 'antd';
+import { Table, Space, Typography, Rate, Popconfirm, Form, Input, Button, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { addProduct, deleteProduct, fetchProduct, updateProduct } from './service';
@@ -270,20 +270,21 @@ const TablePage: React.FC = () => {
 
   return (
     <Form form={form} component={false}>
-      <Search
-        placeholder="Search ASIN or Title"
-        onSearch={handleSearch}
-        className="mb-12"
-        style={{
-          width: 400
-        }}
-      />
+      <Space className='mb-6'>
+        <Button type="primary" onClick={handleAddData}>
+          Duplicate First Row
+        </Button>
+        <Search
+          placeholder="Search ASIN or Title"
+          onSearch={handleSearch}
+          style={{
+            width: 400
+          }}
+        />
+      </Space>
       <Table
         columns={mergedColumns}
-        dataSource={[
-          { asin: <Tag className="cursor-pointer" color="success" onClick={handleAddData}>Duplicate First Row</Tag> },
-          ...dataset,
-        ]}
+        dataSource={dataset}
         bordered
         rowKey="id"
         size="small"
